@@ -76,6 +76,8 @@ const mediaCollection = [
     }
 ];
 
+
+// creo classe movie
 class Movie {
     constructor(title, year, genre, rating, type) {
 
@@ -91,6 +93,7 @@ class Movie {
     }
 }
 
+// creo classe TvSerie
 class TvSerie extends Movie {
 
     constructor(title, year, genre, rating, type, seasons) {
@@ -105,6 +108,8 @@ class TvSerie extends Movie {
 }
 
 
+// tramite .map creare un nuvo array con varie istanze in base al type del oggetto.
+
 const mappedMedia = mediaCollection.map(media => {
     // if (media.type === 'film') {
     //     return new Movie(media.title, media.year, media.genre, media.rating, media.type);
@@ -114,6 +119,8 @@ const mappedMedia = mediaCollection.map(media => {
 
     return media.type === 'film' ? new Movie(media.title, media.year, media.genre, media.rating, media.type) : new TvSerie(media.title, media.year, media.genre, media.rating, media.type, media.seasons);
 })
+
+// calcolare la media dei voti di tutti i film per determinato genere
 
 function avgVote(movies, genre) {
     const filteredMovies = movies.filter(movie => movie.genre === genre);
@@ -129,24 +136,27 @@ function avgVote(movies, genre) {
 console.log(avgVote(mediaCollection, 'Sci-Fi'));
 
 
-// Creiamo una funzione che restituisca la lista di tutti i generi dei film, senza che questi si ripetano.
-
-function getGenres(movies){
-    let g = [];
+// Restituire la lista di tutti i generi dei film, senza che si ripetano.
+function getGenres(){
+    let genres = [];
     mappedMedia.forEach(movie =>{
-        if(!g.includes(movie.genre)) {
-            g.push(movie.genre);
+        if(!genres.includes(movie.genre)) {
+            genres.push(movie.genre);
         }
     })
 
-    return g;
+    return genres;
 }
-//da fare con reduce
 console.log(getGenres(mediaCollection));
 
-//Creiamo una funzione che filtri i film in base ad un genere passato come argomento e ne ritorni un array
+// Creiamo una funzione che filtri i film in base ad un genere passato come argomento e ne ritorni un array
 // con all'interno il risultato della funzione toString() di ogni film.
 
-function getMoviesByGenre(genre){
+function filterMoviesByGenre(movies, genre) {
 
+    const filteredMovies = movies.filter((movie) => movie.genre === genre)
+    const sortedMovies = filteredMovies.map((movie) => movie.toString());
+  
+    return sortedMovies;
 }
+console.log(filterMoviesByGenre(mappedMedia, 'Sci-Fi'));
