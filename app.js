@@ -112,16 +112,8 @@ const mappedMedia = mediaCollection.map(media => {
     //     return new TvSerie(media.title, media.year, media.genre, media.rating, media.type, media.seasons);
     // }
 
-    return media.type == 'film' ? new Movie(media.title, media.year, media.genre, media.rating, media.type) : new TvSerie(media.title, media.year, media.genre, media.rating, media.type, media.seasons);
+    return media.type === 'film' ? new Movie(media.title, media.year, media.genre, media.rating, media.type) : new TvSerie(media.title, media.year, media.genre, media.rating, media.type, media.seasons);
 })
-
-
-/**
- * 
- * Creiamo una funzione che restituisca la media dei voti di tutti i film per un determinato genere.
- *  Prevedere un argomento per la lista dei film ed uno per il genere.
- */
-
 
 function avgVote(movies, genre) {
     const filteredMovies = movies.filter(movie => movie.genre === genre);
@@ -130,10 +122,31 @@ function avgVote(movies, genre) {
 
     const averageRating = totalRating / filteredMovies.length;
 
-    return averageRating;
+    return Math.round(averageRating);
 
 }
 
+console.log(avgVote(mediaCollection, 'Sci-Fi'));
 
 
-console.log(avgVote(mappedMedia, 'Sci-Fi'));
+// Creiamo una funzione che restituisca la lista di tutti i generi dei film, senza che questi si ripetano.
+
+function getGenres(movies){
+    let g = [];
+    mappedMedia.forEach(movie =>{
+        if(!g.includes(movie.genre)) {
+            g.push(movie.genre);
+        }
+    })
+
+    return g;
+}
+//da fare con reduce
+console.log(getGenres(mediaCollection));
+
+//Creiamo una funzione che filtri i film in base ad un genere passato come argomento e ne ritorni un array
+// con all'interno il risultato della funzione toString() di ogni film.
+
+function getMoviesByGenre(genre){
+
+}
