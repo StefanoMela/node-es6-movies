@@ -79,7 +79,10 @@ const mediaCollection = [
 
 // creo classe movie
 class Movie {
-    constructor(title, year, genre, rating, type) {
+
+    // no sense passare type perché stiamo cmq istanziando dei film qui e le serie tv più giù, so già cosa voglio creare, 
+    // le classi son Movie e Tvserie. Diverso sarebbe stato se la classe fosse stata Media, quindi meritevole di una specifica interna
+    constructor(title, year, genre, rating, type) { 
 
         this.title = title;
         this.year = year;
@@ -102,23 +105,25 @@ class TvSerie extends Movie {
     }
 
     toString() {
-        return `${this.title} è una ${this.type} di genere ${this.genre} e ha un voto di ${this.rating}. In totale sono state prodotte ${this.seasons}, la prima in onda dal ${this.year}`
+        return `${this.title} è una ${this.type} di genere ${this.genre} e ha un voto di ${this.rating}. In totale sono state prodotte ${this.seasons} stagioni, la prima in onda dal ${this.year}`
     }
 
 }
 
-
 // tramite .map creare un nuvo array con varie istanze in base al type del oggetto.
-
-const mappedMedia = mediaCollection.map(media => {
-    // if (media.type === 'film') {
-    //     return new Movie(media.title, media.year, media.genre, media.rating, media.type);
-    // } else if (media.type === 'serie') {
-    //     return new TvSerie(media.title, media.year, media.genre, media.rating, media.type, media.seasons);
-    // }
-
+const mappedMedia1 = mediaCollection.map(media => {
     return media.type === 'film' ? new Movie(media.title, media.year, media.genre, media.rating, media.type) : new TvSerie(media.title, media.year, media.genre, media.rating, media.type, media.seasons);
 })
+
+// versione destructured
+const mappedMedia2 = mediaCollection.map(({title, genre, year, rating, type, seasons}) => {
+     return type === 'film' ? new Movie(title, year, genre, rating, type) : new TvSerie(title, year, genre, rating, type, seasons);
+    })
+
+// versione terza
+const mappedMedia3 = mediaCollection.map( m => {
+     return m.type === 'film' ? new Movie(m.title, m.year, m.genre, m.rating, m.type) : new TvSerie(m.title, m.year, m.genre, m.rating, m.type, m.seasons);
+    })
 
 // calcolare la media dei voti di tutti i film per determinato genere
 
@@ -137,10 +142,10 @@ console.log(avgVote(mediaCollection, 'Sci-Fi'));
 
 
 // Restituire la lista di tutti i generi dei film, senza che si ripetano.
-function getGenres(){
+function getGenres() {
     let genres = [];
-    mappedMedia.forEach(movie =>{
-        if(!genres.includes(movie.genre)) {
+    mappedMedia2.forEach(movie => {
+        if (!genres.includes(movie.genre)) {
             genres.push(movie.genre);
         }
     })
@@ -156,7 +161,13 @@ function filterMoviesByGenre(movies, genre) {
 
     const filteredMovies = movies.filter((movie) => movie.genre === genre)
     const sortedMovies = filteredMovies.map((movie) => movie.toString());
-  
+
     return sortedMovies;
 }
-console.log(filterMoviesByGenre(mappedMedia, 'Sci-Fi'));
+console.log(filterMoviesByGenre(mappedMedia2, 'Crime'));
+
+
+
+// forEach quando dobbiamo eseguire un'operazione per ogni elemento dell'array. non voglio ritornare nessun valore. voglio usare gli elementi per fare qualcosa. restituisce sempre undefined.
+// map cicla un array e ne restituisce un altro che sarà sempre della stessa lunghezza dell'array iniziale.
+// filter invece ovviamete filtra e l'array restituito sarà uguale o minore all'array iniziale
